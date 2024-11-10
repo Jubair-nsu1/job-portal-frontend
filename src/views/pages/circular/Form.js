@@ -2,7 +2,7 @@ import {useEffect,useState} from 'react';
 import axios from "axios";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-
+import { SERVER_URL } from '../../../services/helper';
 import ybackground from './images/y-background.png'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -58,7 +58,7 @@ const Form = () => {
     //Get Specific Job Details
     const JobDetailById = async () =>
     {
-        await fetch(`http://localhost:4000/api/viewJob/${params.id}`)
+        await fetch(`${SERVER_URL}/api/viewJob/${params.id}`)
             .then(resposne=> resposne.json())
             .then(res=>setRecord(res))
     }

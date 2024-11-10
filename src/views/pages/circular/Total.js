@@ -2,6 +2,7 @@ import {useEffect,useState} from 'react';
 import slide1 from './images/pic1.jpg'
 import slide2 from './images/pic1.jpg'
 
+import { SERVER_URL } from '../../../services/helper';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -50,7 +51,7 @@ const Total = () => {
 
     //Get All Jobs data 
     const getAllJobsData = async () =>{
-      await fetch('http://localhost:4000/api/viewJobs')
+      await fetch(`${SERVER_URL}/api/viewJobs`)
         .then(resposne=> resposne.json())
         .then(res=>setRecord(res))
     }

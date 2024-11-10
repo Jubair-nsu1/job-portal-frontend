@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 const moment = require('moment');
-
+import { SERVER_URL } from '../../../services/helper';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -51,7 +51,7 @@ const individual = () => {
     //Get Specific Job Details
     const JobDetailById = async () =>
     {
-      await fetch(`http://localhost:4000/api/viewJob/${params.id}`)
+      await fetch(`${SERVER_URL}/api/viewJob/${params.id}`)
       .then(resposne=> resposne.json())
           .then(res=>setRecord(res))
     }
