@@ -152,7 +152,7 @@ const Form = () => {
             formData.append("knowingMedia", knowingMedia);
 
             await axios.post(
-                "http://localhost:4000/api/jobApplication",
+                `${SERVER_URL}/api/jobApplication`,
                 formData,
                 {
                   headers: { "Content-Type": "multipart/form-data" },
