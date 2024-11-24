@@ -81,7 +81,7 @@ const CreatedJobs = () => {
 
     //Takes to Job Page
     const handleClickViewJob = async (id) => { 
-      window.open(`http://localhost:3000/#/jobDetails/${id}`)
+      window.open(`${SERVER_URL}/jobDetails/${id}`)
     } 
 
     //Custom CSS
