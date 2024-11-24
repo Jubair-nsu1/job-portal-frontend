@@ -59,7 +59,6 @@ const CreatedJobs = () => {
         console.log("Delete operation canceled by the user.");
         //Toast Message
       }
-
     } 
 
     //Count total Candidates per job
