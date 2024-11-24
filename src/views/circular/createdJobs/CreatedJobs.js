@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const moment = require('moment');
 import CIcon from '@coreui/icons-react'
 import {SERVER_URL} from '../../../services/helper'
+import {SERVER_URL_JOBS} from '../../../services/helper'
 
 
 import {
@@ -80,7 +81,7 @@ const CreatedJobs = () => {
 
     //Takes to Job Page
     const handleClickViewJob = async (id) => { 
-      window.open(`${SERVER_URL}/jobDetails/${id}`)
+      window.open(`${SERVER_URL_JOBS}/jobDetails/${id}`)
     } 
 
     //Custom CSS
