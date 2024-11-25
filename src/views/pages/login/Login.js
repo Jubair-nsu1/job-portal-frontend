@@ -53,9 +53,9 @@ const loginSubmit = async (event) => {
         const data = await response.json();
 
         if (data.user) {
+          navigate('/dashboard');
             localStorage.setItem('token', data.user);
-            console.log('Login successful');
-            navigate('/dashboard');
+            
         } else {
             setError('Unexpected error occurred. Please try again.');
         }
