@@ -1,7 +1,7 @@
-import { useState , useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import {SERVER_URL} from '../../../services/helper'
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { SERVER_URL } from '../../../services/helper';
+import HashLoader from 'react-spinners/HashLoader';
 
 import {
   CButton,
@@ -15,78 +15,51 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilLockLocked, cilUser } from '@coreui/icons';
 
 const Login = () => {
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  async function loginSubmit(event) {
+  const loginSubmit = async (event) => {
     event.preventDefault();
-        //setLoading(true);
 
-        if(!email && !password){
-            setError("Please enter your email and password")
-        }
-        else if(!email){
-            setError("Please enter your email")
-        }
-        else if(!password){
-            setError("Please enter your password")
-        }
-        else{
-          setError('')
-          
-          const userData = {
-            email,
-            password,
-          }
-                    
-          // Send login request to backend
-          try{
-              const response = await fetch(`${SERVER_URL}/api/login`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(userData),
-                });
-              
-                const data = await response.json()
-              //   setSuccess(false);
-                if (data.user) {
-                    localStorage.setItem('token', data.user)
-                    console.log('Login Success')
-                    console.log(data.name)
-                    console.log(data.user)
-  
-                    window.location = "/dashboard";
-                    // navigate('/dashboard');
-                    // setSuccess(true);
-                    // setLoading(false);
-                } 
-                else {
-                  //   alert('Please check your username and password')
-                  //  setError(data.error);
-                  setError('Wrong Credentials!');
-                }  
-          } 
-          catch (error) {
-              console.log(error);
-          }
-        }
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
 
+    setError(null);
+    setLoading(true);
 
+    try {
+      const response = await fetch(`${SERVER_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-  }
-  
-  // pass: Bylcjob@2024
+      const data = await response.json();
+
+      if (data.user) {
+        localStorage.setItem('token', data.user);
+        console.log('Login successful');
+        navigate('/dashboard');
+      } else {
+        setError('Wrong credentials! Please try again.');
+      }
+    } catch (err) {
+      console.error('Error during login:', err);
+      setError('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
@@ -94,81 +67,74 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
-              
-              <CCard className="p-4 shadow" >
+              <CCard className="p-4 shadow">
                 <CCardBody>
-                  
-                  <CForm onSubmit={loginSubmit}>
-                    <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to your account</p>
-                
-                    {error && (
-                      <span style={{fontWeight:'bold'}}>{error}</span>
-                    )}
-
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
-                      <CFormInput 
-                        placeholder="Username" 
-                        autoComplete="username" 
-                        type='email' 
-                        value={email} 
-                        onChange={e => setEmail(e.target.value)}
-                      />
-                    </CInputGroup>
-                    <CInputGroup className="mb-4">
-                      <CInputGroupText>
-                        <CIcon icon={cilLockLocked} />
-                      </CInputGroupText>
-                      <CFormInput
-                        placeholder="Password"
-                        autoComplete="current-password"
-                        type="password"
-                        value={password} 
-                        onChange={e => setPassword(e.target.value)}
-                      />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol xs={6}>
-                        <CButton style={{fontWeight:'bold'}} type='submit' color="primary" className="px-4">
-                          Login
-                        </CButton>
-                      </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-
+                  {loading ? (
+                    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                      <HashLoader color="#36d7b7" loading={loading} size={75} />
+                    </div>
+                  ) : (
+                    <CForm onSubmit={loginSubmit}>
+                      <h1>Login</h1>
+                      <p className="text-medium-emphasis">Sign In to your account</p>
+                      {error && <span style={{ fontWeight: 'bold', color: 'red' }}>{error}</span>}
+                      <CInputGroup className="mb-3">
+                        <CInputGroupText>
+                          <CIcon icon={cilUser} />
+                        </CInputGroupText>
+                        <CFormInput
+                          placeholder="Email"
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </CInputGroup>
+                      <CInputGroup className="mb-4">
+                        <CInputGroupText>
+                          <CIcon icon={cilLockLocked} />
+                        </CInputGroupText>
+                        <CFormInput
+                          placeholder="Password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </CInputGroup>
+                      <CRow>
+                        <CCol xs={6}>
+                          <CButton type="submit" color="primary" className="px-4">
+                            Login
+                          </CButton>
+                        </CCol>
+                        <CCol xs={6} className="text-right">
+                          <CButton color="link" className="px-0">
+                            Forgot password?
+                          </CButton>
+                        </CCol>
+                      </CRow>
+                    </CForm>
+                  )}
                 </CCardBody>
               </CCard>
-              
               <CCard className="text-white bg-primary py-5">
                 <CCardBody className="text-center">
                   <div>
-                    <h2 style={{fontFamily:'cursive', fontWeight:'bolder'}}>BYLC JOB PORTAL</h2>
-                    <p>
-                      Developed by BYLC IT @ 2024
-                    </p>
+                    <h2 style={{ fontFamily: 'cursive', fontWeight: 'bolder' }}>BYLC JOB PORTAL</h2>
+                    <p>Developed by BYLC IT @ 2024</p>
                     <Link to="/career">
-                      <CButton style={{fontWeight:'bold', color:'blue'}} color="light" className="mt-3" >
+                      <CButton style={{ fontWeight: 'bold', color: 'blue' }} color="light" className="mt-3">
                         Visit BYLC Career
                       </CButton>
                     </Link>
                   </div>
                 </CCardBody>
               </CCard>
-
             </CCardGroup>
           </CCol>
         </CRow>
       </CContainer>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
