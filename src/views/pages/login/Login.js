@@ -19,14 +19,15 @@ import {
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
 
+// Exporting the component at the top level
 const Login = () => {
-onst [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [error, setError] = useState(null);
-const [loading, setLoading] = useState(false);
-const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-const loginSubmit = async (event) => {
+  const loginSubmit = async (event) => {
     event.preventDefault();
 
     if (!email || !password) {
@@ -127,5 +128,6 @@ return (
         </CContainer>
     </div>
 );
+};
 
 export default Login;
