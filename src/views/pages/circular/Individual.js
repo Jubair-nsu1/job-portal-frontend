@@ -53,7 +53,7 @@ const Individual = () => {
   return (
     <div>
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
           <HashLoader color="#36d7b7" loading={loading} size={150} />
         </div>
       ) : (
