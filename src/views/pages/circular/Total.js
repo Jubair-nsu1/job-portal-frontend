@@ -23,11 +23,20 @@ const Total = () => {
   const navigate = useNavigate();
   const [record, setRecord] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [jobLoading, setJobLoading] = useState(true);
 
-  // Navigate to Job Details Page
-  const JobDetails = (id) => {
-    navigate(`/jobDetails/${id}`);
+  const handleNavigate = (id) => {
+    setLoading(true);
+    // Simulate a delay for demonstration purposes
+    setTimeout(() => {
+      setLoading(false);
+      navigate(`/jobDetails/${id}`);
+    }, 1000); // Adjust the timeout as necessary
   };
+  // Navigate to Job Details Page
+  // const JobDetails = (id) => {
+  //   navigate(`/jobDetails/${id}`);
+  // };
 
   // Fetch All Jobs Data
   const getAllJobsData = async () => {
@@ -71,7 +80,7 @@ const Total = () => {
         </div>
       </div>
 
-      {loading ? (
+      {jobLoading ? (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
           <HashLoader color="#36d7b7" loading={loading} size={150} />
         </div>
@@ -86,7 +95,12 @@ const Total = () => {
                       {item.designation}, {item.department}
                     </strong>
                   </CAccordionHeader>
-                  <CAccordionBody style={{ cursor: 'pointer' }} onClick={() => JobDetails(item._id)}>
+                  {loading && 
+                    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                      <HashLoader color="#36d7b7" loading={loading} size={150} />
+                    </div>
+                  }
+                  <CAccordionBody style={{ cursor: 'pointer' }} onClick={handleNavigate(item._id)}>
                     <div className="row g-3 mb-3">
                       <CCol md={4}>
                         <div>
