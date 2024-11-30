@@ -156,7 +156,7 @@ const Individual = () => {
                 </center>
               </CCol>
               <div className="mb-3">
-                <center><Link to="/career"><a style={{ color: 'darkgreen', fontWeight: 'bold' }}>View all opportunities at BYLC</a></Link></center>
+                <center><Link to="/"><a style={{ color: 'darkgreen', fontWeight: 'bold' }}>View all opportunities at BYLC</a></Link></center>
               </div>
 
             </CRow>
