@@ -23,20 +23,11 @@ const Total = () => {
   const navigate = useNavigate();
   const [record, setRecord] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [jobLoading, setJobLoading] = useState(true);
 
-  const handleNavigate = (id) => {
-    setLoading(true);
-    // Simulate a delay for demonstration purposes
-    setTimeout(() => {
-      setLoading(false);
-      navigate(`/jobDetails/${id}`);
-    }, 1000); // Adjust the timeout as necessary
-  };
   // Navigate to Job Details Page
-  // const JobDetails = (id) => {
-  //   navigate(`/jobDetails/${id}`);
-  // };
+  const JobDetails = (id) => {
+    navigate(`/jobDetails/${id}`);
+  };
 
   // Fetch All Jobs Data
   const getAllJobsData = async () => {
@@ -95,8 +86,7 @@ const Total = () => {
                       {item.designation}, {item.department}
                     </strong>
                   </CAccordionHeader>
-                  {jobLoading && <div className="loading-overlay">Loading...</div>}
-                  <CAccordionBody style={{ cursor: 'pointer' }} onClick={handleNavigate(item._id)}>
+                  <CAccordionBody style={{ cursor: 'pointer' }} onClick={() => JobDetails(item._id)}>
                     <div className="row g-3 mb-3">
                       <CCol md={4}>
                         <div>
