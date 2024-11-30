@@ -6,7 +6,6 @@ import { SERVER_URL } from '../../../services/helper';
 import ybackground from './images/y-background.png'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import HashLoader from 'react-spinners/HashLoader';
 
 import {
     CAvatar,
@@ -25,39 +24,36 @@ import {
   } from '@coreui/react'
 
 const Form = () => {
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    phone: '',
-    dob: '',
-    gender: '',
-    address: '',
-    university: '',
-    subject: '',
-    degree: '',
-    cgpa: '',
-    uniPassingYear: '',
-    isFresher: false,
-    employerName: '',
-    workExperience: '',
-    currentDesignation: '',
-    currentSalary: '',
-    resume: '',
-    coverLetter: '',
-    knowingMedia: '',
-    expectedSalary: '',
-  });
 
-  const [checked, setChecked] = useState(false);
-  const [message, setMessage] = useState('');
-  const [record, setRecord] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
-  const [valid, setValid] = useState(false);
-  const [error, setError] = useState(null);
+    const [fullname, setFullname] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [dob, setDob] = useState("");
+    const [gender, setGender] = useState("");
+    const [address, setAddress] = useState("");
+    const [university, setUniversity] = useState("");
+    const [subject, setSubject] = useState("");
+    const [degree, setDegree] = useState("");
+    const [cgpa, setCgpa] = useState("");
+    const [uniPassingYear, setUniPassingYear] = useState("");
+    const [isFresher, setIsFresher] = useState(false);
+    const [employerName, setEmployerName] = useState("");
+    const [workExperience, setWorkExperience] = useState("");
+    const [currentDesignation, setCurrentDesignation] = useState("");
+    const [currentSalary, setCurrentSalary] = useState("");
+    const [resume, setResume] = useState("");
+    const [coverLetter, setCoverLetter] = useState(""); 
+    const [knowingMedia, setKnowingMedia] = useState("");
+    const [expectedSalary, setExpectedSalary] = useState("");
+    
+    const [checked, setChecked] = useState(false);
+    const [message, setMessage] = useState(""); //Status
+    const [record,setRecord] = useState([]) //Record stores data fetched from server
 
-  const navigate = useNavigate();
-  const params = useParams();
+
+
+    const navigate = useNavigate();
+    const params = useParams(); // Get ID from URL
 
   // Get Specific Job Details
   const JobDetailById = async () => {
@@ -76,92 +72,104 @@ const Form = () => {
     JobDetailById(params.id);
   }, [params.id]);
 
-  // Go back to job details
-  const GoBack = (id) => {
-    navigate(`/jobDetails/${id}`);
-  };
-
-  // Line break component
-  const ColoredLine = ({ color }) => (
-    <hr
-      style={{
-        color: color,
-        backgroundColor: color,
-        height: 3,
-      }}
-    />
-  );
-
-  // Email Validator
-  const validateEmail = () => {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter your valid BYLC email');
-    } else {
-      setError('');
+    //Takes to Apply Form Page when the clicking the button
+    const GoBack = async (id) =>{
+        navigate(`/jobDetails/${id}`);
     }
-  };
 
-  useEffect(() => {
-    validateEmail();
-  }, [formData.email]);
+    //Line break
+    const ColoredLine = ({ color }) => (
+        <hr
+            style = {{
+                color: color,
+                backgroundColor: color,
+                height: 3
+            }}
+        />
+    );
 
-  // Handle Fresher checkbox change
-  const checkFresher = (e) => {
-    const isChecked = e.target.checked;
-    setChecked(isChecked);
-    if (isChecked) {
-      setFormData((prevState) => ({
-        ...prevState,
-        isFresher: true,
-        employerName: 'N/A',
-        workExperience: '0',
-        currentDesignation: 'N/A',
-        currentSalary: 'N/A',
-      }));
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        isFresher: false,
-      }));
-    }
-  };
-
-  // Handle form submission
-  const FormSubmit = async (e) => {
-    e.preventDefault();
-    if (Object.values(formData).every((field) => field !== '' && field !== null)) {
-      setValid(true);
-      const form = new FormData();
-      let jobId = params.id;
-      let position = record.designation;
-      let department = record.department;
-
-      if (formData.isFresher) {
-        setFormData((prevState) => ({ ...prevState, isFresher: 'Yes' }));
-      }
-
-      Object.keys(formData).forEach((key) => {
-        if (key !== 'resume' && key !== 'coverLetter') {
-          form.append(key, formData[key]);
+    //Email Validator
+    const validateEmail = () => {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+        if (!emailRegex.test(email)) {
+            setError('Please enter your valid BYLC email');
+        } else {
+            setError('');
         }
-      });
+    };
+    useEffect(() => {
+        validateEmail();
+    }, [email]);
 
-      form.append('jobId', jobId);
-      form.append('position', position);
-      form.append('department', department);
+    const [submitted, setSubmitted] = useState(false);
+    const [valid, setValid]     = useState(false);
+    const [error, setError]     = useState(null);
+    const [loading, setLoading] = useState(false);
 
-      // Append files
-      form.append('resume', formData.resume);
-      form.append('coverLetter', formData.coverLetter);
-
-      await axios.post(`${SERVER_URL}/api/jobApplication`, form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      setSubmitted(true);
+    async function checkFresher(e){
+        let isChecked = e.target.checked;
+        if(isChecked){
+            setIsFresher(true);
+            setEmployerName('N/A');
+            setWorkExperience('0');
+            setCurrentDesignation('N/A');
+            setCurrentSalary('N/A');
+        }
+        setChecked(!checked)
     }
-  };
+
+    async function FormSubmit(e) {
+        e.preventDefault();
+        
+        if(fullname && email && phone && dob && gender && address && university && subject && degree && cgpa && uniPassingYear && resume && coverLetter && expectedSalary && knowingMedia){
+            setValid(true);
+            //setLoading(true);
+            const formData = new FormData();
+            let jobId = params.id; //Job ID taken from url
+            let position = record.designation; //fetched data
+            let department = record.department; //fetched data
+    
+            if(isFresher==true){
+                setIsFresher('Yes');
+            }
+            
+            formData.append("jobId", jobId);
+            formData.append("position", position);
+            formData.append("department", department);
+            formData.append("fullname", fullname);
+            formData.append("email", email);
+            formData.append("phone", phone);
+            formData.append("dob", dob);
+            formData.append("gender", gender);
+            formData.append("address", address);
+            formData.append("university", university);
+            formData.append("subject", subject);
+            formData.append("degree", degree);
+            formData.append("cgpa", cgpa);
+            formData.append("uniPassingYear", uniPassingYear);
+            formData.append("isFresher", isFresher);
+            formData.append("employerName", employerName);
+            formData.append("workExperience", workExperience);
+            formData.append("currentDesignation", currentDesignation);
+            formData.append("currentSalary", currentSalary);
+            formData.append("resume", resume);
+            formData.append("coverLetter", coverLetter);
+            formData.append("expectedSalary", expectedSalary);
+            formData.append("knowingMedia", knowingMedia);
+
+            await axios.post(
+                `${SERVER_URL}/api/jobApplication`,
+                formData,
+                {
+                  headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
+
+        }
+        //Set Form submitted true
+        setSubmitted(true);
+        //setLoading(false);
+    } 
 
     
 
@@ -173,7 +181,7 @@ const Form = () => {
         </div>
         ) : (
         <>
-        <Navbar/>
+   <Navbar/>
 
         <div style={{ backgroundImage: `url(${ybackground})` , backgroundRepeat: 'no-repeat', backgroundAttachment:'fixed', backgroundSize: '40% 70%' , backgroundPosition: 'top right'}}>
             <div class="container-sm mt-3 mb-5" >    
@@ -438,9 +446,9 @@ const Form = () => {
                 </div>
                 </CForm>
             </div>
-          </div>
+        </div>
 
-          <Footer/>
+        <Footer/>
         </>
       )}
     </div>
