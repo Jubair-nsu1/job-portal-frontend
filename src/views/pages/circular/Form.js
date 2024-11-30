@@ -6,6 +6,7 @@ import { SERVER_URL } from '../../../services/helper';
 import ybackground from './images/y-background.png'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import HashLoader from 'react-spinners/HashLoader';
 
 import {
     CAvatar,
@@ -49,7 +50,7 @@ const Form = () => {
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState(""); //Status
     const [record,setRecord] = useState([]) //Record stores data fetched from server
-
+    const [loading, setLoading] = useState(true);
 
 
     const navigate = useNavigate();
@@ -58,9 +59,15 @@ const Form = () => {
     //Get Specific Job Details
     const JobDetailById = async () =>
     {
-        await fetch(`${SERVER_URL}/api/viewJob/${params.id}`)
-            .then(resposne=> resposne.json())
-            .then(res=>setRecord(res))
+      try {
+        const response = await fetch(`${SERVER_URL}/api/viewJob/${params.id}`)
+        const data = await response.json();
+        setRecord(data);
+      } catch (error) {
+        console.error('Failed to fetch jobs:', error);
+      } finally {
+        setLoading(false);
+      }
     }
     useEffect(()=> {
         JobDetailById(params.id);
@@ -169,6 +176,12 @@ const Form = () => {
 
   return (
     <div>
+      {loading ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+          <HashLoader color="#36d7b7" loading={loading} size={150} />
+        </div>
+        ) : (
+        <>
         <Navbar/>
 
         <div style={{ backgroundImage: `url(${ybackground})` , backgroundRepeat: 'no-repeat', backgroundAttachment:'fixed', backgroundSize: '40% 70%' , backgroundPosition: 'top right'}}>
@@ -434,10 +447,11 @@ const Form = () => {
                 </div>
                 </CForm>
             </div>
-        </div>
+          </div>
 
-        <Footer/>
-
+          <Footer/>
+        </>
+      )}
     </div>
   )
 }
