@@ -6,6 +6,7 @@ import { SERVER_URL } from '../../../services/helper';
 import ybackground from './images/y-background.png'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import HashLoader from 'react-spinners/HashLoader';
 
 import {
     CAvatar,
