@@ -49,8 +49,10 @@ const Form = () => {
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState(""); //Status
     const [record,setRecord] = useState([]) //Record stores data fetched from server
-    const [loading, setLoading] = useState(true);
-
+    const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [valid, setValid]     = useState(false);
+    const [error, setError]     = useState(null);
 
     const navigate = useNavigate();
     const params = useParams(); // Get ID from URL
@@ -58,6 +60,7 @@ const Form = () => {
   // Get Specific Job Details
   const JobDetailById = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${SERVER_URL}/api/viewJob/${params.id}`);
       const data = await response.json();
       setRecord(data);
@@ -101,10 +104,6 @@ const Form = () => {
         validateEmail();
     }, [email]);
 
-    const [submitted, setSubmitted] = useState(false);
-    const [valid, setValid]     = useState(false);
-    const [error, setError]     = useState(null);
-    const [loading, setLoading] = useState(false);
 
     async function checkFresher(e){
         let isChecked = e.target.checked;
