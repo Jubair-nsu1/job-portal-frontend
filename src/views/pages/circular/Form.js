@@ -49,7 +49,7 @@ const Form = () => {
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState(""); //Status
     const [record,setRecord] = useState([]) //Record stores data fetched from server
-
+    const [loading, setLoading] = useState(true);
 
 
     const navigate = useNavigate();
