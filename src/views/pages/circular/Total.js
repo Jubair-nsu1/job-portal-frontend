@@ -80,7 +80,7 @@ const Total = () => {
         </div>
       </div>
 
-      {jobLoading ? (
+      {loading ? (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
           <HashLoader color="#36d7b7" loading={loading} size={150} />
         </div>
@@ -95,11 +95,7 @@ const Total = () => {
                       {item.designation}, {item.department}
                     </strong>
                   </CAccordionHeader>
-                  {loading && 
-                    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
-                      <HashLoader color="#36d7b7" loading={loading} size={150} />
-                    </div>
-                  }
+                  {jobLoading && <div className="loading-overlay">Loading...</div>}
                   <CAccordionBody style={{ cursor: 'pointer' }} onClick={handleNavigate(item._id)}>
                     <div className="row g-3 mb-3">
                       <CCol md={4}>
